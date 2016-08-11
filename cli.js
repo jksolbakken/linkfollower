@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const follower = require('./linkfollower');
 
 let link = process.argv[2];
