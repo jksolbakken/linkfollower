@@ -39,4 +39,10 @@ describe("linkfollower", function () {
     return expect(result).to.eventually.be.rejectedWith('Exceeded max redirect depth of 10');
   });
 
+  it("should fail if redirect without location header", function () {
+    let result = follower.follow('http://localhost:3000/nolocation');
+    return expect(result).to.eventually.be.rejectedWith('http://localhost:3000/nolocation returned a redirect ' 
+      + 'but no Location header');
+  });
+
 });

@@ -40,6 +40,10 @@ let startFollowing = (startUrl, success, failure) => {
             response.on('end', () => {
                 result.push({ url: location.href, status: response.statusCode });
                 if (isRedirect(response)) {
+                    if (!response.headers.location) {
+                        failure(new Error(location.href + ' returned a redirect but no Location header'));
+                        return;
+                    }
                     depth++;
                     visit(location.parse(response.headers.location));
                 } else {

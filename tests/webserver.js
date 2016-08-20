@@ -1,7 +1,12 @@
 var express = require('express');
 var app = express();
 
-app.use('/:number', function (req, res, next) {
+app.use('/nolocation', (req, res, next) => {
+  //res.header('Location', 'Something');
+  res.sendStatus(302);
+});
+
+app.use('/:number', (req, res, next) => {
   let number = req.params.number;
   if (number > 1) {
      res.redirect('http://localhost:3000/' + (--number));
