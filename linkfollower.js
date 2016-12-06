@@ -6,8 +6,9 @@ const MAX_REDIRECT_DEPTH = 10;
 
 let follow = (link) => {
     return new Promise((resolve, reject) => {
+        link = prefixWithHttp(link);
         let parsedUrl = url.parse(link);
-        if (parsedUrl.protocol == null || parsedUrl.host == null) {
+        if (parsedUrl.host == null) {
             reject(link + ' is not a valid URL');
         }
 
@@ -65,6 +66,15 @@ let isRedirect = response => {
         || statusCode === 303
         || statusCode === 307
         || statusCode === 308;
+}
+
+let prefixWithHttp = function(link) {
+    let pattern = new RegExp('^http');
+    if (!pattern.test(link)) {
+        return 'http://' + link;
+    }
+
+    return link;
 }
 
 exports.follow = follow;

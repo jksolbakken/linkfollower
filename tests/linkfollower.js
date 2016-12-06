@@ -45,4 +45,9 @@ describe("linkfollower", function () {
       + 'but no Location header');
   });
 
+  it("should add missing http prefix in links", function () {
+    let result = follower.follow('localhost:3000/1');
+    return expect(result).to.eventually.be.fulfilled;
+  });
+
 });
