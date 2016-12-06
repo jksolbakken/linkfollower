@@ -4,7 +4,7 @@ const follower = require('./linkfollower');
 
 let link = process.argv[2];
 if (!link) {
-   console.log('Usage: linkfollower <URL>');
+   console.log('Usage: follow <URL>');
    process.exit(1);
 }
 
