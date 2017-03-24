@@ -32,7 +32,10 @@ let startFollowing = (startUrl, success, failure) => {
         let options = {
             host: location.hostname,
             path: location.path,
-            port: location.port
+            port: location.port,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
+            }
         };
         let requestor = location.protocol.startsWith('https') ? https : http;
         requestor.get(options, response => {
