@@ -1,6 +1,6 @@
 {
   "name": "linkfollower",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Node.js based command line utility that lets you follow redirects to see where http URLs end up. Useful for shortened URLs.",
   "main": "cli.js",
   "dependencies": {},
