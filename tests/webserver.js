@@ -7,7 +7,7 @@ app.get('/nolocation', (req, res) => {
 });
 
 app.get('/meta', (req, res) => {
-  res.send('<META http-equiv="refresh" content="0;url=http://localhost:3000/1">')
+  res.send('<META http-equiv="refresh" content="0; url=http://localhost:3000/1">')
 });
 
 app.get('/:number', (req, res) => {
