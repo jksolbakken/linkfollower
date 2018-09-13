@@ -1,17 +1,17 @@
 #!/usr/bin/env node
 
-const follower = require('./linkfollower');
+const follower = require('./linkfollower')
 
-let link = process.argv[2];
-if (!link) {
-   console.log('Usage: follow <URL>');
-   process.exit(1);
+const follow = async url => {
+    const visits = await follower.startFollowing(url)
+    visits.map(v => v.redirect ? `${v.url} -> ${v.status}` : `${v.url} -> ${v.status || ""}`)
+          .forEach(v => console.log(v))
 }
 
-follower.follow(link)
-   .then(result => {
-      result.forEach(value => console.log(value.url + ' -> ' + value.status));
-   })
-   .catch(error => {
-      console.error(error);
-   });
+let url = process.argv[2];
+if (!url) {
+   console.log('Usage: follow <URL>')
+   process.exit(1)
+}
+
+follow(url)

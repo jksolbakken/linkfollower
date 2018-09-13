@@ -1,17 +1,18 @@
 {
   "name": "linkfollower",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Node.js based command line utility that lets you follow redirects to see where http URLs end up. Useful for shortened URLs.",
   "main": "cli.js",
-  "dependencies": {},
+  "dependencies": {
+    "node-fetch": "^2.2.0"
+  },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "express": "^4.15.2",
-    "mocha": "^3.2.0"
+    "chai": "^4.1.2",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec tests/"
+    "test": "./node_modules/.bin/mocha --reporter spec --exit tests/"
   },
   "author": "J-K. Solbakken",
   "license": "ISC",
