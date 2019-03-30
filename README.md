@@ -1,6 +1,6 @@
 # linkfollower
 
-[![Build Status](https://travis-ci.org/jksolbakken/linkfollower.svg?branch=master)](https://travis-ci.org/jksolbakken/linkfollower)
+[![CircleCI](https://circleci.com/gh/jksolbakken/linkfollower.svg?style=svg)](https://circleci.com/gh/jksolbakken/linkfollower)
 
 [![npm version](https://badge.fury.io/js/linkfollower.png)](https://badge.fury.io/js/linkfollower)
 
