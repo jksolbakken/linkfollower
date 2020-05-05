@@ -39,17 +39,12 @@ describe('linkfollower', function () {
     const result = await follower.startFollowing('localhost:3000/1')
     expect(result[0].status).to.equal(200)
   })
-/*
-  it('should handle 200 + meta refresh tag', function () {
-    const result = follower.startFollowing('localhost:3000/meta')
-    return expect(result).to.eventually.deep.equal(expectedWithMetaRefresh)
+
+  it('should handle 200 + meta refresh tag', async function () {
+    const result = await follower.startFollowing('localhost:3000/meta')
+    return expect(result).to.deep.equal(expectedWithMetaRefresh)
   })
 
-  it('should reject invalid URLs', function () {
-    const result = follower.startFollowing('bogus://something')
-    return expect(result).to.eventually.be.rejected
-  })
-*/
   const expectedStatusCodesOnly = [
     {
       'redirect': true,
@@ -80,7 +75,7 @@ describe('linkfollower', function () {
     {
       'status': 200,
       'redirect': false,
-      'redirectUrl': 'http://localhost:3000/1'
+      'url': 'http://localhost:3000/1'
     }
   ]
 
