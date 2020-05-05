@@ -1,6 +1,6 @@
 # linkfollower
 
-[![CircleCI](https://circleci.com/gh/jksolbakken/linkfollower.svg?style=svg)](https://circleci.com/gh/jksolbakken/linkfollower)
+![master](https://github.com/jksolbakken/linkfollower/workflows/master/badge.svg)
 
 [![npm version](https://badge.fury.io/js/linkfollower.png)](https://badge.fury.io/js/linkfollower)
 
