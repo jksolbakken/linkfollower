@@ -31,6 +31,7 @@ jobs:
           # You can also omit the token and run the tools that support default configurations
           # project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           verbose: true
+          esversion: 6 
           output: results.sarif
           format: sarif
           # Force 0 exit code to allow SARIF file generation
