@@ -1,7 +1,7 @@
-const express = require('express')
+import express from 'express'
 const app = express()
 
-const start = () => {
+const startWebserver = () => {
   console.log('Starting server');
 
   app.get('/nolocation', (req, res) => {
@@ -26,6 +26,4 @@ const start = () => {
   })
 }
 
-module.exports = { 
-  'start': start
-}
+export default startWebserver

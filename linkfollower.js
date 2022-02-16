@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+import fetch from 'node-fetch'
 
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
 const metaRefreshPattern = '(CONTENT|content)=["\']0;[ ]*(URL|url)=(.*?)(["\']*>)';
@@ -12,6 +12,28 @@ const fetchOptions = {
         'User-Agent': userAgent,
         'Accept': 'text/html'
     }
+}
+
+export default async url => {
+    const visits = []
+    let count = 1
+    let keepGoing = true
+    while (keepGoing) {
+        if (count > MAX_REDIRECT_DEPTH) {
+            throw `Exceeded max redirect depth of ${MAX_REDIRECT_DEPTH}`
+        }
+        try {
+            const response = await visit(url)
+            count++
+            visits.push(response)
+            keepGoing = response.redirect
+            url = response.redirectUrl
+        } catch (err) {
+            keepGoing = false
+            visits.push({ url: url, redirect: false, status: `Error: ${err}` })
+        }
+    }
+    return visits;
 }
 
 const visit = async url => {
@@ -35,28 +57,6 @@ const visit = async url => {
     }
 }
 
-const startFollowing = async url => {
-    const visits = []
-    let count = 1
-    keepGoing = true
-    while (keepGoing) {
-        if (count > MAX_REDIRECT_DEPTH) {
-            throw `Exceeded max redirect depth of ${MAX_REDIRECT_DEPTH}`
-        }
-        try {
-            const response = await visit(url)
-            count++
-            visits.push(response)
-            keepGoing = response.redirect
-            url = response.redirectUrl
-        } catch (err) {
-            keepGoing = false
-            visits.push({ url: url, redirect: false, status: `Error: ${err}` })
-        }
-    }
-    return visits;
-}
-
 const isRedirect = status => {
     return status === 301
         || status === 302
@@ -77,8 +77,4 @@ const prefixWithHttp = url => {
     }
 
     return url;
-}
-
-module.exports = {
-    startFollowing: startFollowing
 }

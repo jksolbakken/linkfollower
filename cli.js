@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const follower = require('./linkfollower')
+import startFollowing from './linkfollower.js'
 
 const follow = async url => {
-    const visits = await follower.startFollowing(url)
+    const visits = await startFollowing(url)
     visits.map(v => v.redirect ? `${v.url} -> ${v.status}` : `${v.url} -> ${v.status || ""}`)
           .forEach(v => console.log(v))
 }

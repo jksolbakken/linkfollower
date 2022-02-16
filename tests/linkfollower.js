@@ -1,27 +1,29 @@
-const follower = require('../linkfollower')
-const chai = require('chai')
+import startFollowing from '../linkfollower.js'
+import chai from 'chai'
+import './webserver.js'
+import startWebserver from './webserver.js'
+
 const expect = chai.expect
-const webserver = require('./webserver')
 
 describe('linkfollower', function () {
 
   before( () => {
-    webserver.start()
+    startWebserver()
   })
 
   it ('should return an array with urls and status codes', async () => {
-    const result = await follower.startFollowing('http://localhost:3000/3')
+    const result = await startFollowing('http://localhost:3000/3')
     expect(result).to.deep.equal(expectedStatusCodesOnly)
   })
 
   it('should cope with up to 10 redirects', async () => {
-    const result = await follower.startFollowing('http://localhost:3000/10')
+    const result = await startFollowing('http://localhost:3000/10')
     expect(result.length).to.equal(10)
   })
 
   it('should fail if more than 10 redirects', async () => {
     try {
-      await follower.startFollowing('http://localhost:3000/11')
+      await startFollowing('http://localhost:3000/11')
     } catch (error) {
       expect(error).to.equal('Exceeded max redirect depth of 10')
     }
@@ -29,19 +31,19 @@ describe('linkfollower', function () {
 
   it('should fail if status code redirect without location header', async () => {
     try {
-      await follower.startFollowing('http://localhost:3000/nolocation')
+      await startFollowing('http://localhost:3000/nolocation')
     } catch (error) {
       expect(error).to.equal('http://localhost:3000/nolocation returned a redirect but no URL')
     }
   })
 
   it('should add missing http prefix in links', async () => {
-    const result = await follower.startFollowing('localhost:3000/1')
+    const result = await startFollowing('localhost:3000/1')
     expect(result[0].status).to.equal(200)
   })
 
   it('should handle 200 + meta refresh tag', async function () {
-    const result = await follower.startFollowing('localhost:3000/meta')
+    const result = await startFollowing('localhost:3000/meta')
     return expect(result).to.deep.equal(expectedWithMetaRefresh)
   })
 
