@@ -3,15 +3,14 @@
 import startFollowing from './linkfollower.js'
 
 const follow = async url => {
-    const visits = await startFollowing(url)
-    visits.map(v => v.redirect ? `${v.url} -> ${v.status}` : `${v.url} -> ${v.status || ""}`)
-          .forEach(v => console.log(v))
+   for await (const response of startFollowing(url)) {
+      console.log(`${response.url}: ${response.status}`)
+    }
 }
 
-let url = process.argv[2];
-if (!url) {
+if (process.argv.length != 3) {
    console.log('Usage: follow <URL>')
    process.exit(1)
 }
 
-follow(url)
+follow(process.argv[2])

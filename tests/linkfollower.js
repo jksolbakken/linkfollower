@@ -12,39 +12,50 @@ describe('linkfollower', function () {
   })
 
   it ('should return an array with urls and status codes', async () => {
-    const result = await startFollowing('http://localhost:3000/3')
-    expect(result).to.deep.equal(expectedStatusCodesOnly)
+    const iterator = await startFollowing('http://localhost:3000/3')
+    for (let i = 0; i < expectedStatusCodesOnly.length; i++) {
+      const result = (await iterator.next()).value
+      expect(result).to.deep.equal(expectedStatusCodesOnly[i])
+    }
   })
 
+  
   it('should cope with up to 10 redirects', async () => {
-    const result = await startFollowing('http://localhost:3000/10')
-    expect(result.length).to.equal(10)
+    let count = 0
+    for await (const _ of startFollowing('http://localhost:3000/10')) {
+      count++
+    }
+    expect(count).to.equal(10)
   })
 
   it('should fail if more than 10 redirects', async () => {
-    try {
-      await startFollowing('http://localhost:3000/11')
-    } catch (error) {
-      expect(error).to.equal('Exceeded max redirect depth of 10')
-    }
+      const itr = await startFollowing('http://localhost:3000/11')
+      for (let i = 0; i < 10; i++) {
+        await itr.next()
+      }
+      const result = (await itr.next()).value
+      expect(result.redirect ?? false).to.be.false
   })
-
+  
   it('should fail if status code redirect without location header', async () => {
-    try {
-      await startFollowing('http://localhost:3000/nolocation')
-    } catch (error) {
-      expect(error).to.equal('http://localhost:3000/nolocation returned a redirect but no URL')
-    }
+      const itr = await startFollowing('http://localhost:3000/nolocation')
+      const result = (await itr.next()).value
+      expect(result.redirect ?? false).to.be.false
   })
-
+  
   it('should add missing http prefix in links', async () => {
-    const result = await startFollowing('localhost:3000/1')
-    expect(result[0].status).to.equal(200)
+    const itr = await startFollowing('localhost:3000/1')
+    const result = (await itr.next()).value
+    expect(result.status).to.equal(200)
+    expect(result.url).to.equal('http://localhost:3000/1')
   })
 
   it('should handle 200 + meta refresh tag', async function () {
-    const result = await startFollowing('localhost:3000/meta')
-    return expect(result).to.deep.equal(expectedWithMetaRefresh)
+    const iterator = await startFollowing('http://localhost:3000/meta')
+    for (let i = 0; i < expectedWithMetaRefresh.length; i++) {
+      const result = (await iterator.next()).value
+      expect(result).to.deep.equal(expectedWithMetaRefresh[i])
+    }
   })
 
   const expectedStatusCodesOnly = [

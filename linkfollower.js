@@ -1,3 +1,4 @@
+import { response } from 'express';
 import fetch from 'node-fetch'
 
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
@@ -14,46 +15,47 @@ const fetchOptions = {
     }
 }
 
-export default async url => {
-    const visits = []
+export default async function* startFollowing(url) {
     let count = 1
     let keepGoing = true
     while (keepGoing) {
         if (count > MAX_REDIRECT_DEPTH) {
-            throw `Exceeded max redirect depth of ${MAX_REDIRECT_DEPTH}`
+            return { url: url, status: `Max redirect depth of ${MAX_REDIRECT_DEPTH} exceeded`  }
         }
         try {
             const response = await visit(url)
             count++
-            visits.push(response)
             keepGoing = response.redirect
             url = response.redirectUrl
+            yield response
         } catch (err) {
             keepGoing = false
-            visits.push({ url: url, redirect: false, status: `Error: ${err}` })
+            return { url: url, status: `${err}` }
         }
     }
-    return visits;
+    return { url: url, redirect: response.redirect, status: response.status  }
 }
 
 const visit = async url => {
     url = prefixWithHttp(url)
-    const response = await fetch(url, fetchOptions)
-
-    if (isRedirect(response.status)) {
-        const location = response.headers.get('location')
-        if (!location) {
-            throw `${url} responded with status ${response.status} but no location header`
-        }
-        return { url: url, redirect: true, status: response.status, redirectUrl: response.headers.get('location') }
-    } else if (response.status == 200) {
-        const text = await response.text()
-        const redirectUrl = extractMetaRefreshUrl(text)
-        return redirectUrl ?
-            { url: url, redirect: true, status: '200 + META REFRESH', redirectUrl: redirectUrl } :
-            { url: url, redirect: false, status: response.status }
-    } else {
-        return { url: url, redirect: false, status: response.status }
+    try {
+        const response = await fetch(url, fetchOptions)   
+        if (isRedirect(response.status)) {
+            const location = response.headers.get('location')
+            if (!location) {
+                return { status: `${url} responded with status ${response.status} but no location header` }
+            }
+            return { url: url, redirect: true, status: response.status, redirectUrl: response.headers.get('location') }
+        } 
+        
+        if (response.status == 200) {
+            const redirectUrl = extractMetaRefreshUrl(await response.text())
+            return redirectUrl ?
+                { url: url, redirect: true, status: '200 + META REFRESH', redirectUrl: redirectUrl } :
+                { url: url, redirect: false, status: response.status }
+        } 
+    } catch (error) {
+        return { status: `${error.message}` }
     }
 }
 
