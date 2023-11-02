@@ -4,7 +4,7 @@ import startFollowing from './linkfollower.js'
 
 const follow = async url => {
    for await (const response of startFollowing(url)) {
-      console.log(`${response.url}: ${response.status}`)
+      console.log(`${response.url} ${response.status}`)
     }
 }
 
