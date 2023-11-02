@@ -1,8 +1,7 @@
-import { response } from 'express';
 import fetch from 'node-fetch'
 
 const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246'
-const metaRefreshPattern = '(CONTENT|content)=["\']0;[ ]*(URL|url)=(.*?)(["\']*>)';
+const metaRefreshPattern = '(CONTENT|content)=["\']0;[ ]*(URL|url)=(.*?)(["\']*>)'
 
 const MAX_REDIRECT_DEPTH = 10;
 
@@ -33,7 +32,6 @@ export default async function* startFollowing(url) {
             return { url: url, status: `${err}` }
         }
     }
-    return { url: url, redirect: response.redirect, status: response.status  }
 }
 
 const visit = async url => {
@@ -41,11 +39,11 @@ const visit = async url => {
     try {
         const response = await fetch(url, fetchOptions)   
         if (isRedirect(response.status)) {
-            const location = response.headers.get('location')
+            const location = response.headers.get('location').replaceAll(/\/$/g, "")
             if (!location) {
                 return { status: `${url} responded with status ${response.status} but no location header` }
             }
-            return { url: url, redirect: true, status: response.status, redirectUrl: response.headers.get('location') }
+            return { url: url, redirect: true, status: response.status, redirectUrl: location }
         } 
         
         if (response.status == 200) {
@@ -69,7 +67,7 @@ const isRedirect = status => {
 
 const extractMetaRefreshUrl = html => {
     let match = html.match(metaRefreshPattern)
-    return match && match.length == 5 ? match[3] : null
+    return match && match.length == 5 ? stripUnwantedCharsFrom(match[3]) : null
 }
 
 const prefixWithHttp = url => {
@@ -80,3 +78,9 @@ const prefixWithHttp = url => {
 
     return url;
 }
+
+const stripUnwantedCharsFrom = (url) => url
+    .replaceAll("'", "")
+    .replaceAll('"', "")
+    .replaceAll(" ", "")
+    .replaceAll(/\/$/g, "")
