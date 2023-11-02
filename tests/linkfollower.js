@@ -58,6 +58,22 @@ describe('linkfollower', function () {
     }
   })
 
+  it('should handle meta refresh locations in single quotes', async function () {
+    const iterator = await startFollowing('http://localhost:3000/metasinglequotes')
+    for (let i = 0; i < expectedWithMetaRefresh.length; i++) {
+      const result = (await iterator.next()).value
+      expect(result).to.deep.equal(expectedWithMetaRefreshSingleQuotes[i])
+    }
+  })
+
+  it('should handle meta refresh locations in double quotes', async function () {
+    const iterator = await startFollowing('http://localhost:3000/metadoublequotes')
+    for (let i = 0; i < expectedWithMetaRefresh.length; i++) {
+      const result = (await iterator.next()).value
+      expect(result).to.deep.equal(expectedWithMetaRefreshDoubleQuotes[i])
+    }
+  })
+
   const expectedStatusCodesOnly = [
     {
       'redirect': true,
@@ -83,6 +99,34 @@ describe('linkfollower', function () {
       'redirect': true,
       'status': '200 + META REFRESH',
       'url': 'http://localhost:3000/meta',
+      'redirectUrl': 'http://localhost:3000/1'
+    },
+    {
+      'status': 200,
+      'redirect': false,
+      'url': 'http://localhost:3000/1'
+    }
+  ]
+
+  const expectedWithMetaRefreshSingleQuotes = [
+    {
+      'redirect': true,
+      'status': '200 + META REFRESH',
+      'url': 'http://localhost:3000/metasinglequotes',
+      'redirectUrl': 'http://localhost:3000/1'
+    },
+    {
+      'status': 200,
+      'redirect': false,
+      'url': 'http://localhost:3000/1'
+    }
+  ]
+
+  const expectedWithMetaRefreshDoubleQuotes = [
+    {
+      'redirect': true,
+      'status': '200 + META REFRESH',
+      'url': 'http://localhost:3000/metadoublequotes',
       'redirectUrl': 'http://localhost:3000/1'
     },
     {
