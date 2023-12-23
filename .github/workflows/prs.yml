@@ -1,8 +1,7 @@
-name: master
+name: Pull Requests
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types: [opened, reopened]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,6 +21,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-node-
       - name: Install deps
-        run: npm install
+        run: npm ci
       - name: Run tests
         run: npm test
