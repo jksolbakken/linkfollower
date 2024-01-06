@@ -25,7 +25,7 @@ export default async function* startFollowing(url) {
             const response = await visit(url)
             count++
             keepGoing = response.redirect
-            url = response.redirectUrl
+            url = keepGoing ? new URL(response.redirectUrl) : null
             yield response
         } catch (err) {
             keepGoing = false
@@ -35,21 +35,20 @@ export default async function* startFollowing(url) {
 }
 
 const visit = async url => {
-    url = prefixWithHttp(url)
     try {
         const response = await fetch(url, fetchOptions)   
         if (isRedirect(response.status)) {
-            const location = response.headers.get('location').replaceAll(/\/$/g, "")
-            if (!location) {
+            const locationHeader = response.headers.get('location').replaceAll(/\/$/g, "")
+            if (!locationHeader) {
                 return { status: `${url} responded with status ${response.status} but no location header` }
             }
-            return { url: url, redirect: true, status: response.status, redirectUrl: location }
+            return { url: url, redirect: true, status: response.status, redirectUrl: addPathTo(locationHeader, url.origin) }
         } 
         
         if (response.status == 200) {
-            const redirectUrl = extractMetaRefreshUrl(await response.text())
-            return redirectUrl ?
-                { url: url, redirect: true, status: '200 + META REFRESH', redirectUrl: redirectUrl } :
+            const metaRefreshUrl = extractMetaRefreshUrl(await response.text())
+            return metaRefreshUrl ?
+                { url: url, redirect: true, status: '200 + META REFRESH', redirectUrl: addPathTo(metaRefreshUrl, url.origin) } :
                 { url: url, redirect: false, status: response.status }
         } 
     } catch (error) {
@@ -70,17 +69,16 @@ const extractMetaRefreshUrl = html => {
     return match && match.length == 5 ? stripUnwantedCharsFrom(match[3]) : null
 }
 
-const prefixWithHttp = url => {
-    let pattern = new RegExp('^http');
-    if (!pattern.test(url)) {
-        return 'http://' + url;
-    }
-
-    return url;
-}
-
 const stripUnwantedCharsFrom = (url) => url
     .replaceAll("'", "")
     .replaceAll('"', "")
     .replaceAll(" ", "")
     .replaceAll(/\/$/g, "")
+
+const addPathTo = (locationResponse, base) => {
+    if (locationResponse.startsWith('http')) {
+        new URL(locationResponse)
+    }
+
+    return new URL(locationResponse, base)
+}
