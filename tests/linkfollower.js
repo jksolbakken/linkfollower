@@ -1,9 +1,7 @@
 import startFollowing from '../linkfollower.js'
-import chai from 'chai'
+import { expect } from 'chai'
 import './webserver.js'
 import startWebserver from './webserver.js'
-
-const expect = chai.expect
 
 describe('linkfollower', function () {
 
