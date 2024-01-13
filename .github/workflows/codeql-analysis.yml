@@ -15,12 +15,11 @@ permissions:
 jobs:
   analyze:
     permissions:
-      actions: read  # for github/codeql-action/init to get workflow details
-      contents: read  # for actions/checkout to fetch code
-      security-events: write  # for github/codeql-action/autobuild to send a status report
+      actions: read # for github/codeql-action/init to get workflow details
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/autobuild to send a status report
     name: Analyze
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
@@ -29,45 +28,39 @@ jobs:
         language: ['javascript']
         # Learn more...
         # https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#overriding-automatic-language-detection
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        # We must fetch at least the immediate parents so that if this is
-        # a pull request then we can checkout the head.
-        fetch-depth: 2
+      - name: Checkout repository
+        uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # ratchet:actions/checkout@v2
+        with:
+          # We must fetch at least the immediate parents so that if this is
+          # a pull request then we can checkout the head.
+          fetch-depth: 2
+      # If this run was triggered by a pull request event, then checkout
+      # the head of the pull request instead of the merge commit.
+      - run: git checkout HEAD^2
+        if: ${{ github.event_name == 'pull_request' }}
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@231aa2c8a89117b126725a0e11897209b7118144 # ratchet:github/codeql-action/init@v1
+        with:
+          languages: ${{ matrix.language }}
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file. 
+          # Prefix the list here with "+" to use these queries and those in the config file.
+          # queries: ./path/to/local/query, your-org/your-repo/queries@main
+      # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+      # If this step fails, then you should remove it and run the build manually (see below)
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@231aa2c8a89117b126725a0e11897209b7118144 # ratchet:github/codeql-action/autobuild@v1
+      # ℹ️ Command-line programs to run using the OS shell.
+      # 📚 https://git.io/JvXDl
 
-    # If this run was triggered by a pull request event, then checkout
-    # the head of the pull request instead of the merge commit.
-    - run: git checkout HEAD^2
-      if: ${{ github.event_name == 'pull_request' }}
+      # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
+      #    and modify them (or add more) to build your code if your project
+      #    uses a compiled language
 
-    # Initializes the CodeQL tools for scanning.
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file. 
-        # Prefix the list here with "+" to use these queries and those in the config file.
-        # queries: ./path/to/local/query, your-org/your-repo/queries@main
-
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
-
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 https://git.io/JvXDl
-
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
-
-    #- run: |
-    #   make bootstrap
-    #   make release
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      #- run: |
+      #   make bootstrap
+      #   make release
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@231aa2c8a89117b126725a0e11897209b7118144 # ratchet:github/codeql-action/analyze@v1
