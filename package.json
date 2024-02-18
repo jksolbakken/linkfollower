@@ -10,7 +10,7 @@
     "mocha": "10.3.0"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec --exit tests/"
+    "test": "mocha --reporter spec --exit tests/"
   },
   "author": "J-K. Solbakken",
   "license": "ISC",
