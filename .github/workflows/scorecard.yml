@@ -31,6 +31,7 @@ jobs:
             bestpractices.coreinfrastructure.org:443 
             fulcio.sigstore.dev:443 
             github.com:443 
+            api.github.com:443 
             rekor.sigstore.dev:443 
             sigstore-tuf-root.storage.googleapis.com:443 
             www.bestpractices.dev:443
