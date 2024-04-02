@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Harden runner
-        uses: harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # ratchet:step-security/harden-runner@v2
         with:
           disable-sudo: true
           egress-policy: block
