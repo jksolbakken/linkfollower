@@ -71,6 +71,12 @@ describe('linkfollower', function () {
     expect(result).to.deep.equal(expectedWithOnlyPath)
   })
 
+  it('should extract links from lnkd.in urls', async function () {
+    const iterator = await startFollowing(new URL('http://localhost:3000/lnkdin'))
+    const result = (await iterator.next()).value
+    expect(result).to.deep.equal(expectedLnkdIn)
+  })
+
   const expectedStatusCodesOnly = [
     {
       'redirect': true,
@@ -94,7 +100,7 @@ describe('linkfollower', function () {
   const expectedWithMetaRefresh = [
     {
       'redirect': true,
-      'status': '200 + META REFRESH',
+      'status': '200 + extracted',
       'url': new URL('http://localhost:3000/meta'),
       'redirectUrl': new URL('http://localhost:3000/1')
     },
@@ -108,7 +114,7 @@ describe('linkfollower', function () {
   const expectedWithMetaRefreshSingleQuotes = [
     {
       'redirect': true,
-      'status': '200 + META REFRESH',
+      'status': '200 + extracted',
       'url': new URL('http://localhost:3000/metasinglequotes'),
       'redirectUrl': new URL('http://localhost:3000/1')
     },
@@ -122,7 +128,7 @@ describe('linkfollower', function () {
   const expectedWithMetaRefreshDoubleQuotes = [
     {
       'redirect': true,
-      'status': '200 + META REFRESH',
+      'status': '200 + extracted',
       'url': new URL('http://localhost:3000/metadoublequotes'),
       'redirectUrl': new URL('http://localhost:3000/1')
     },
@@ -140,4 +146,12 @@ describe('linkfollower', function () {
     'redirectUrl': new URL('http://localhost:3000/only/the/path')
   }
 
+  const expectedLnkdIn = {
+    'status': '200 + extracted',
+    'redirect': true,
+    'url': new URL('http://localhost:3000/lnkdin'),
+    'redirectUrl': new URL('https://sf.globalappsec.org/trainings/')
+  }
+
 })
+

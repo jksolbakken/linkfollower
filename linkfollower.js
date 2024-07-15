@@ -40,14 +40,19 @@ const visit = async url => {
             if (!locationHeader) {
                 return { status: `${url} responded with status ${response.status} but no location header` }
             }
-            return { url: url, redirect: true, status: response.status, redirectUrl: addPathTo(locationHeader, url.origin) }
+            return { url: url, redirect: true, status: response.status, redirectUrl: addBaseTo(locationHeader, url.origin) }
         } 
         
-        if (response.status == 200) {
-            const metaRefreshUrl = extractMetaRefreshUrl(await response.text())
-            return metaRefreshUrl ?
-                { url: url, redirect: true, status: '200 + META REFRESH', redirectUrl: addPathTo(metaRefreshUrl, url.origin) } :
-                { url: url, redirect: false, status: response.status }
+        if (response.status === 200) {
+            const html = await response.text()
+            for (const urlExtractor of extractors) {
+                const extracted = urlExtractor(html)
+                if (extracted) {
+                    return { url: url, redirect: true, status: '200 + extracted', redirectUrl: addBaseTo(extracted, url.origin) }
+                }
+            }
+            
+            return { url: url, redirect: false, status: response.status }
         } 
     } catch (error) {
         return { status: `${error.message}` }
@@ -67,16 +72,24 @@ const extractMetaRefreshUrl = html => {
     return match && match.length == 5 ? stripUnwantedCharsFrom(match[3]) : null
 }
 
+const extractFromLinkedIn = (html) => {
+    const regex = /<a.*name="external_url_click".*>\s+(http[s]?:\/\/.*\s+)<\/a>/g
+    const matches = [...html.matchAll(regex)]
+    return matches.length != 0 ? matches.map(m => m[1])[0].trim() : null
+}
+
 const stripUnwantedCharsFrom = (url) => url
     .replaceAll("'", "")
     .replaceAll('"', "")
     .replaceAll(" ", "")
     .replaceAll(/\/$/g, "")
 
-const addPathTo = (locationResponse, base) => {
-    if (locationResponse.startsWith('http')) {
-        new URL(locationResponse)
+const addBaseTo = (maybeCompleteUrl, base) => {
+    if (maybeCompleteUrl.startsWith('http')) {
+        new URL(maybeCompleteUrl)
     }
 
-    return new URL(locationResponse, base)
+    return new URL(maybeCompleteUrl, base)
 }
+
+const extractors = [extractMetaRefreshUrl, extractFromLinkedIn]
