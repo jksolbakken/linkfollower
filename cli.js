@@ -9,14 +9,6 @@ const follow = async url => {
       console.log(`${result.value.url} ${result.value.status}`)
       result = await iterator.next()
    }
-   if (result.value?.status) {
-      console.log(result.value.status)
-   }
-}
-
-if (process.argv.length != 3) {
-   console.log('Usage: follow <URL>')
-   process.exit(1)
 }
 
 const prefixWithHttp = url => {
@@ -26,6 +18,11 @@ const prefixWithHttp = url => {
    }
 
    return url;
+}
+
+if (process.argv.length != 3) {
+   console.log('Usage: follow <URL>')
+   process.exit(1)
 }
 
 const url = new URL(prefixWithHttp(process.argv[2]))

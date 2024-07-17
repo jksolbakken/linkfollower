@@ -17,7 +17,7 @@ export default async function* startFollowing(url) {
     let keepGoing = true
     while (keepGoing) {
         if (count > MAX_REDIRECT_DEPTH) {
-            return { url: url, status: `Max redirect depth of ${MAX_REDIRECT_DEPTH} exceeded`  }
+            return { url: url, status: `Max redirect depth of ${MAX_REDIRECT_DEPTH} exceeded` }
         }
         try {
             const response = await visit(url)
@@ -34,26 +34,21 @@ export default async function* startFollowing(url) {
 
 const visit = async url => {
     try {
-        const response = await fetch(url, fetchOptions)   
+        const response = await fetch(url, fetchOptions)
         if (isRedirect(response.status)) {
             const locationHeader = response.headers.get('location').replaceAll(/\/$/g, "")
-            if (!locationHeader) {
-                return { status: `${url} responded with status ${response.status} but no location header` }
-            }
-            return { url: url, redirect: true, status: response.status, redirectUrl: addBaseTo(locationHeader, url.origin) }
-        } 
-        
+            return locationHeader 
+                ? { url: url, redirect: true, status: response.status, redirectUrl: addBaseTo(locationHeader, url.origin) } 
+                : { status: `${url} responded with status ${response.status} but no location header` }
+        }
+
         if (response.status === 200) {
             const html = await response.text()
-            for (const urlExtractor of extractors) {
-                const extracted = urlExtractor(html)
-                if (extracted) {
-                    return { url: url, redirect: true, status: '200 + extracted', redirectUrl: addBaseTo(extracted, url.origin) }
-                }
-            }
-            
-            return { url: url, redirect: false, status: response.status }
-        } 
+            const extracted = extractors.flatMap((extractor) => extractor(html)).filter((elem) => elem != null)
+            return extracted.length !== 0 
+                ? { url: url, redirect: true, status: '200 + extracted', redirectUrl: new URL(addBaseTo(extracted[0], url.origin)) }
+                : { url: url, redirect: false, status: response.status }
+        }
     } catch (error) {
         return { status: `${error.message}` }
     }
