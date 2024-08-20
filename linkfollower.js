@@ -73,11 +73,7 @@ const extractFromLinkedIn = (html) => {
     return matches.length != 0 ? matches.map(m => m[1])[0].trim() : null
 }
 
-const stripUnwantedCharsFrom = (url) => url
-    .replaceAll("'", "")
-    .replaceAll('"', "")
-    .replaceAll(" ", "")
-    .replaceAll(/\/$/g, "")
+const stripUnwantedCharsFrom = (url) => url.replaceAll(/['" ]/g, "")
 
 const addBaseTo = (maybeCompleteUrl, base) => {
     if (maybeCompleteUrl.startsWith('http')) {
