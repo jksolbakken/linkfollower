@@ -1,4 +1,4 @@
-const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.2592.102'
+const edgeOnWin10 = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.2592.102'
 const metaRefreshPattern = '(CONTENT|content)=["\']0;[ ]*(URL|url)=(.*?)(["\']*>)'
 
 const MAX_REDIRECT_DEPTH = 10;
@@ -7,7 +7,7 @@ const fetchOptions = {
     redirect: 'manual',
     follow: 0,
     headers: {
-        'User-Agent': userAgent,
+        'User-Agent': edgeOnWin10,
         'Accept': 'text/html'
     }
 }
