@@ -5,7 +5,7 @@
   "description": "Command line utility that lets you follow redirects to see where http URLs end up. Useful for shortened URLs.",
   "main": "cli.js",
   "devDependencies": {
-    "chai": "5.1.2",
+    "chai": "5.2.0",
     "express": "4.21.2",
     "mocha": "11.1.0"
   },
