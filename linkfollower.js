@@ -49,6 +49,7 @@ const visit = async url => {
                 ? { url: url, redirect: true, status: '200 + extracted', redirectUrl: new URL(addBaseTo(extracted[0], url.origin)) }
                 : { url: url, redirect: false, status: response.status }
         }
+        return { url: url, redirect: false, status: response.status }
     } catch (error) {
         return { status: `${error.message}` }
     }

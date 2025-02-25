@@ -77,6 +77,14 @@ describe('linkfollower', function () {
     expect(result).to.deep.equal(expectedLnkdIn)
   })
 
+  it('should handle error statuses', async function () {
+    const iterator = await startFollowing(new URL('http://localhost:3000/redirecttoerror'))
+    for (let i = 0; i < expectedWithErrorStatus.length; i++) {
+      const result = (await iterator.next()).value
+      expect(result).to.deep.equal(expectedWithErrorStatus[i])
+    }
+  })
+
   const expectedStatusCodesOnly = [
     {
       'redirect': true,
@@ -152,6 +160,20 @@ describe('linkfollower', function () {
     'url': new URL('http://localhost:3000/lnkdin'),
     'redirectUrl': new URL('https://sf.globalappsec.org/trainings/')
   }
+
+  const expectedWithErrorStatus = [
+    {
+      'redirect': true,
+      'status': 302,
+      'url': new URL('http://localhost:3000/redirecttoerror'),
+      'redirectUrl': new URL('http://localhost:3000/yolo')
+    },
+    {
+      'status': 404,
+      'redirect': false,
+      'url': new URL('http://localhost:3000/yolo')
+    }
+  ]
 
 })
 

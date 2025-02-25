@@ -28,6 +28,14 @@ const startWebserver = () => {
     res.send(lnkdInResponse)
   })
   
+  app.get('/redirecttoerror', (req, res) => {
+    res.redirect('http://localhost:3000/yolo')
+  })
+
+  app.get('/yolo', (req, res) => {
+    res.sendStatus(404)
+  })
+  
   app.get('/:number', (req, res) => {
     let number = req.params.number;
     if (number > 1) {
