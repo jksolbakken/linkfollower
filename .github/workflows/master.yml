@@ -28,7 +28,7 @@ jobs:
           node-version: "20.x"
       - name: Cache node deps
         id: cache-node
-        uses: actions/cache@04.2.2
+        uses: actions/cache@4.2.2
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
