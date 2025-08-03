@@ -12,7 +12,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@63c24ba6bd7ba022e95695ff85de572c04a18142 # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
         with:
           disable-sudo: true
           egress-policy: block
