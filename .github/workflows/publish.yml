@@ -20,6 +20,7 @@ jobs:
           disable-sudo: true
           egress-policy: block
           allowed-endpoints: >
+            api.github.com
             github.com:443
             registry.npmjs.org:443
             fulcio.sigstore.dev:443
