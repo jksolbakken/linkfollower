@@ -7,7 +7,7 @@
   "devDependencies": {
     "chai": "6.2.0",
     "express": "5.1.0",
-    "mocha": "11.7.4"
+    "mocha": "11.7.5"
   },
   "scripts": {
     "test": "mocha --reporter spec --exit tests/"
