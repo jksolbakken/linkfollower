@@ -1,2 +1,4 @@
 tests
 .github/
+.tool-versions/
+*.md
