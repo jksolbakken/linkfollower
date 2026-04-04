@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+    environment:
+      name: publish
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
