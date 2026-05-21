@@ -17,7 +17,7 @@ jobs:
       name: publish
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # ratchet:step-security/harden-runner@v2
+        uses: step-security/harden-runner@ab7a9404c0f3da075243ca237b5fac12c98deaa5 # ratchet:step-security/harden-runner@v2
         with:
           disable-sudo: true
           egress-policy: block
@@ -29,7 +29,7 @@ jobs:
             fulcio.sigstore.dev:443
             rekor.sigstore.dev:443
             nodejs.org:443
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # ratchet:actions/checkout@v4
         with:
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # ratchet:actions/setup-node@v4
