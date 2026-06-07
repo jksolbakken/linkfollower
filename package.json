@@ -21,5 +21,8 @@
   "preferGlobal": true,
   "bin": {
     "follow": "cli.js"
+  },
+  "publishConfig": {
+    "provenance": true
   }
 }
