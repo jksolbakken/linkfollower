@@ -41,4 +41,4 @@ jobs:
         with:
           version: 11
       - run: pnpm ci
-      - run: pnpm stage publish --provenance
+      - run: pnpm stage publish --provenance --access public --no-git-checks
