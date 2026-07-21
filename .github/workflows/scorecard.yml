@@ -5,7 +5,7 @@ on:
     - cron: '25 10 * * 5'
   workflow_dispatch:
   push:
-    branches: ["master"]
+    branches: ["main"]
 
 permissions: read-all
 
