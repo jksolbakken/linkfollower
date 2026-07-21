@@ -48,18 +48,20 @@ jobs:
       # If this step fails, then you should remove it and run the build manually (see below)
       - name: Autobuild
         uses: github/codeql-action/autobuild@231aa2c8a89117b126725a0e11897209b7118144 # ratchet:github/codeql-action/autobuild@v1
-      #    uses a compiled language
-
-
       #- run: |
+
 
       #   make bootstrap
 
       #   make release
+
       - name: Perform CodeQL Analysis
         # ℹ️ Command-line programs to run using the OS shell.
         # 📚 https://git.io/JvXDl
 
+
+
+        #    uses a compiled language
 
         # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
 
