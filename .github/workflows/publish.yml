@@ -37,7 +37,7 @@ jobs:
           node-version: '26.3.0'
           registry-url: 'https://registry.npmjs.org'
           package-manager-cache: false
-      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # ratchet:pnpm/action-setup@v6
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # ratchet:pnpm/action-setup@v6.1.0
         with:
           version: 11
       - run: pnpm ci
