@@ -5,12 +5,11 @@
   "description": "Command line utility that lets you follow redirects to see where http URLs end up. Useful for shortened URLs.",
   "main": "cli.js",
   "devDependencies": {
-    "chai": "6.3.0",
     "express": "5.2.1",
-    "mocha": "12.0.3"
+    "vitest": "^5.0.4"
   },
   "scripts": {
-    "test": "mocha --reporter spec --exit tests/"
+    "test": "pnpm dlx vitest run"
   },
   "author": "J-K. Solbakken",
   "license": "ISC",

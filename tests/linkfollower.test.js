@@ -1,11 +1,11 @@
 import startFollowing from '../linkfollower.js'
-import { expect } from 'chai'
 import './webserver.js'
 import startWebserver from './webserver.js'
+import { expect, describe, beforeAll, it } from 'vitest'
 
 describe('linkfollower', function () {
 
-  before( () => {
+  beforeAll( () => {
     startWebserver()
   })
 
