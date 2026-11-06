@@ -5,22 +5,22 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/dependabot-automerge.yml':
         - 'dependabot/fetch-metadata@v3.1.0'
-        - 'step-security/harden-runner@v2.22.1'
+        - 'step-security/harden-runner@v2.22.2'
     '.github/workflows/main.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
         - 'pnpm/action-setup@v6.1.0'
-        - 'step-security/harden-runner@v2.22.1'
+        - 'step-security/harden-runner@v2.22.2'
     '.github/workflows/prs.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
         - 'pnpm/action-setup@v6.1.0'
-        - 'step-security/harden-runner@v2.22.1'
+        - 'step-security/harden-runner@v2.22.2'
     '.github/workflows/publish.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
         - 'pnpm/action-setup@v6.1.0'
-        - 'step-security/harden-runner@v2.22.1'
+        - 'step-security/harden-runner@v2.22.2'
 dependencies:
     'actions/checkout@v7.0.1':
         ref: 'v7.0.1'
@@ -42,8 +42,8 @@ dependencies:
         commit: 'sha1-ea17c68df8912ef543352723c149a84f56e3d413'
         owner_id: 21320719
         repo_id: 262289747
-    'step-security/harden-runner@v2.22.1':
-        ref: 'v2.22.1'
-        commit: 'sha1-ccd8616d44fd3846e67624a50d5aad6d37bf2d25'
+    'step-security/harden-runner@v2.22.2':
+        ref: 'v2.22.2'
+        commit: 'sha1-dc2769abcc0fcfbadfc1df54081c1608579ef6b2'
         owner_id: 88700172
         repo_id: 422287306
